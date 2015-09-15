@@ -21,6 +21,8 @@ class CHARACTER_API ACR_MainCharacter : public ACharacter
 	/**Record the world Rotation for movement */
 	FRotator Direction;
 
+   
+
 public:
 	// Sets default values for this character's properties
 	ACR_MainCharacter();
@@ -36,6 +38,19 @@ public:
 	/**Is in Lock Camera mode?*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 		bool LockCamera;
+
+   /**Camera Zoom Rate*/
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+      float BaseZoomRate;
+
+   /**Max Zoom in*/
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+      float MaxZoomIn;
+
+   /**Max Zoom Out*/
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+      float MaxZoomOut;
+
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -76,6 +91,9 @@ protected:
 
 	/**Update Rotation when in lockCamera mode*/
 	void UpdateRotation();
+
+   /**Adjust Camera Boom*/
+   void AdjustCamBoom(float Rate);
 
 protected:
 	// APawn interface

@@ -45,6 +45,12 @@ ACR_MainCharacter::ACR_MainCharacter()
 
 	LockCamera = true;
 
+   BaseZoomRate = 10.f;
+
+   MaxZoomIn = 30.f;
+
+   MaxZoomOut = 100.f;
+
 }
 
 void ACR_MainCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
@@ -72,6 +78,8 @@ void ACR_MainCharacter::SetupPlayerInputComponent(class UInputComponent* InputCo
 	//Camera Mode
 	InputComponent->BindAction("CameraMode", IE_Pressed, this, &ACR_MainCharacter::CameraMode);
 	InputComponent->BindAction("CameraMode", IE_Released, this, &ACR_MainCharacter::CameraMode);
+
+   InputComponent->BindAxis("CameraZoom", this, &ACR_MainCharacter::AdjustCamBoom);
 }
 
 
@@ -159,9 +167,13 @@ void ACR_MainCharacter::UpdateRotation()
 void ACR_MainCharacter::CameraMode()
 {
 	LockCamera = !LockCamera;
+}
 
-
-
+void ACR_MainCharacter::AdjustCamBoom(float Rate)
+{
+   CameraBoom->TargetArmLength += Rate*BaseZoomRate;
+   if (GEngine)
+      GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::, FString::SanitizeFloat(CameraBoom->TargetArmLength) );
 }
 
 // Called when the game starts or when spawned
