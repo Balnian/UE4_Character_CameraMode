@@ -47,9 +47,9 @@ ACR_MainCharacter::ACR_MainCharacter()
 
    BaseZoomRate = 10.f;
 
-   MaxZoomIn = 30.f;
+   MaxZoomIn = 100.f;
 
-   MaxZoomOut = 100.f;
+   MaxZoomOut = 500.f;
 
 }
 
@@ -159,9 +159,9 @@ void ACR_MainCharacter::UpdateRotation()
 		Direction = Controller->GetControlRotation();
 		GetMesh()->SetWorldRotation(FRotator(0, Direction.Yaw + 270, 0));
 	}
-
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, Direction.ToString());
+   
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, Direction.ToString());*/
 }
 
 void ACR_MainCharacter::CameraMode()
@@ -171,9 +171,14 @@ void ACR_MainCharacter::CameraMode()
 
 void ACR_MainCharacter::AdjustCamBoom(float Rate)
 {
-   CameraBoom->TargetArmLength += Rate*BaseZoomRate;
+   float future = CameraBoom->TargetArmLength + Rate*BaseZoomRate;
+   if (future <= MaxZoomIn)
+      future = MaxZoomIn;
+   else if (future >= MaxZoomOut)
+      future = MaxZoomOut;
+   CameraBoom->TargetArmLength = future;
    if (GEngine)
-      GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::, FString::SanitizeFloat(CameraBoom->TargetArmLength) );
+      GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::SanitizeFloat(CameraBoom->TargetArmLength) );
 }
 
 // Called when the game starts or when spawned
