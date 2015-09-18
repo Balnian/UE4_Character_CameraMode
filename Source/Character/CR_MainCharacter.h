@@ -18,6 +18,15 @@ class CHARACTER_API ACR_MainCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+   /**collision pour les attack de type melee (En avant du personnage) */
+   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+      UBoxComponent* MeleeAttackBox;
+
+   /**collision pour les attack de type AOI (au tour du personnage) */
+   UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+      USphereComponent* AoiAttackShere;
+   
+
 	/**Record the world Rotation for movement */
 	FRotator Direction;
 
@@ -67,6 +76,10 @@ public:
    /**Damage modifier*/
    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
       float BaseDamageModifier;
+
+   /**base Damage dealt by character*/
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+      float BaseDamage;
 
 
 

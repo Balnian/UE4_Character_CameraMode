@@ -55,10 +55,17 @@ ACR_MainCharacter::ACR_MainCharacter()
 
    IsAttacking = false;
 
+   /**Combat System collision*/
+
+   MeleeAttackBox = CreateDefaultSubobject<UBoxComponent>(TEXT("MeleeAttackBox"));
+   AoiAttackShere = CreateDefaultSubobject<USphereComponent>(TEXT("AoiAttackShere"));
+
    /**Stats*/
    BaseHealth = 100;
 
    BaseDamageModifier = 1.5f;
+
+   BaseDamage = 10.f;
 
 }
 
@@ -91,8 +98,8 @@ void ACR_MainCharacter::SetupPlayerInputComponent(class UInputComponent* InputCo
    InputComponent->BindAxis("CameraZoom", this, &ACR_MainCharacter::AdjustCamBoom);
 
    //Attack
-   InputComponent->BindAction("Attack", IE_Pressed, this, &ACR_MainCharacter::CameraMode);
-   InputComponent->BindAction("Attack", IE_Released, this, &ACR_MainCharacter::CameraMode);
+   InputComponent->BindAction("Attack", IE_Pressed, this, &ACR_MainCharacter::BeginAttack);
+   InputComponent->BindAction("Attack", IE_Released, this, &ACR_MainCharacter::LauchAttack);
 }
 
 
@@ -170,7 +177,8 @@ void ACR_MainCharacter::UpdateRotation()
 	if (Controller != NULL)
 	{
 		Direction = Controller->GetControlRotation();
-		GetMesh()->SetWorldRotation(FRotator(0, Direction.Yaw + 270, 0));
+      this->SetActorRotation(FRotator(0, Direction.Yaw, 0));
+		//GetMesh()->SetWorldRotation(FRotator(0, Direction.Yaw + 270, 0));
 	}
    
 	/*if (GEngine)
@@ -204,7 +212,23 @@ void ACR_MainCharacter::BeginAttack()
 /**Attack Launch*/
 void ACR_MainCharacter::LauchAttack()
 {
+
    IsAttacking = true;
+   TArray< AActor * >  OverlappingActors;
+   MeleeAttackBox->GetOverlappingActors(OverlappingActors);
+   for (size_t i = 0; i < OverlappingActors.Num(); i++)
+   {
+      if (OverlappingActors[i]->bCanBeDamaged)
+      {
+         if (Controller != NULL)
+         //this->GetAttachedActors()
+         OverlappingActors[i]->TakeDamage(BaseDamage*BaseDamageModifier, FDamageEvent(), Controller, this);
+         if (GEngine)
+            GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::SanitizeFloat(BaseDamage*BaseDamageModifier));
+      }
+         
+   }
+   
 
    
 }
@@ -220,6 +244,8 @@ void ACR_MainCharacter::BeginPlay()
 void ACR_MainCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
+   if (IsAttacking)
+      IsAttacking = false;
 
 }
 
