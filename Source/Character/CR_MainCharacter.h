@@ -51,6 +51,28 @@ public:
    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
       float MaxZoomOut;
 
+   /**Is taking Modifier*/
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "États")
+     bool IsTakingModifier;
+
+   /**Is taking Modifier*/
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "États")
+      bool IsAttacking;
+
+   /**Vie de base du personnage*/
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statistique")
+     int32 BaseHealth;
+
+
+   /**Damage modifier*/
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+      float BaseDamageModifier;
+
+
+
+   
+
+
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -94,6 +116,12 @@ protected:
 
    /**Adjust Camera Boom*/
    void AdjustCamBoom(float Rate);
+
+   /**Attack Start*/
+   void BeginAttack();
+
+   /**Attack Launch*/
+   void LauchAttack();
 
 protected:
 	// APawn interface

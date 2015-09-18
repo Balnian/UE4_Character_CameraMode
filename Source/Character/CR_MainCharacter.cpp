@@ -51,6 +51,15 @@ ACR_MainCharacter::ACR_MainCharacter()
 
    MaxZoomOut = 500.f;
 
+   IsTakingModifier = false;
+
+   IsAttacking = false;
+
+   /**Stats*/
+   BaseHealth = 100;
+
+   BaseDamageModifier = 1.5f;
+
 }
 
 void ACR_MainCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
@@ -80,6 +89,10 @@ void ACR_MainCharacter::SetupPlayerInputComponent(class UInputComponent* InputCo
 	InputComponent->BindAction("CameraMode", IE_Released, this, &ACR_MainCharacter::CameraMode);
 
    InputComponent->BindAxis("CameraZoom", this, &ACR_MainCharacter::AdjustCamBoom);
+
+   //Attack
+   InputComponent->BindAction("Attack", IE_Pressed, this, &ACR_MainCharacter::CameraMode);
+   InputComponent->BindAction("Attack", IE_Released, this, &ACR_MainCharacter::CameraMode);
 }
 
 
@@ -177,8 +190,23 @@ void ACR_MainCharacter::AdjustCamBoom(float Rate)
    else if (future >= MaxZoomOut)
       future = MaxZoomOut;
    CameraBoom->TargetArmLength = future;
-   if (GEngine)
-      GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::SanitizeFloat(CameraBoom->TargetArmLength) );
+
+   /*if (GEngine)
+      GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::SanitizeFloat(CameraBoom->TargetArmLength) );*/
+}
+
+/**Attack Start*/
+void ACR_MainCharacter::BeginAttack()
+{
+   IsTakingModifier = true;
+}
+
+/**Attack Launch*/
+void ACR_MainCharacter::LauchAttack()
+{
+   IsAttacking = true;
+
+   
 }
 
 // Called when the game starts or when spawned
