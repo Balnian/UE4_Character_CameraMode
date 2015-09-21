@@ -74,11 +74,11 @@ public:
 
 
    /**Damage modifier*/
-   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statistique")
       float BaseDamageModifier;
 
    /**base Damage dealt by character*/
-   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+   UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Statistique")
       float BaseDamage;
 
 
@@ -134,7 +134,7 @@ protected:
    void BeginAttack();
 
    /**Attack Launch*/
-   void LauchAttack();
+   void LaunchAttack();
 
 protected:
 	// APawn interface
